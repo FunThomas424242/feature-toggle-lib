@@ -1,5 +1,7 @@
 # feature-toggle-lib
 
+[![Build Status](https://travis-ci.org/FunThomas424242/feature-toggle-lib.svg?branch=master)](https://travis-ci.org/FunThomas424242/feature-toggle-lib)
+
 Java lib to enable and disable feature toggle in an application and test.
 
 Features:
