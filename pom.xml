@@ -5,7 +5,7 @@
 	<artifactId>feature-toogle-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>Feature Toggle - Parent</name>
 	<inceptionYear>2016</inceptionYear>
 
@@ -142,5 +142,32 @@
 			</roles>
 		</developer>
 	</developers>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray-plugins</name>
+			<url>http://jcenter.bintray.com</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>jfrog-releases</id>
+			<url>http://oss.jfrog.org/artifactory/plugins-release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>jfrog-snapshots</id>
+			<url>http://oss.jfrog.org/artifactory/plugins-snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+
 
 </project>

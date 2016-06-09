@@ -6,4 +6,6 @@ language:
 jdk:
     - oraclejdk8
 
-
+script:
+    - cd feature-toggle-example
+    - mvn clean install
