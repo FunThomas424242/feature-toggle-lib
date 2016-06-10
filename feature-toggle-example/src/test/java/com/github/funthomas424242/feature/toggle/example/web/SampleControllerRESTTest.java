@@ -25,7 +25,7 @@ import com.jayway.restassured.RestAssured;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public class SampleControllerTest {
+public class SampleControllerRESTTest {
 
 	@Autowired
 	TextRepository repository;

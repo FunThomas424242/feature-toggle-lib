@@ -12,12 +12,17 @@ import com.github.funthomas424242.feature.toggle.example.domain.Text;
 @Component
 public class TextRepository {
 
-	protected int globalId = 0;
-
 	final Map<Integer, Text> dbTable = new HashMap<>();
 
-	protected synchronized int getNextId() {
-		return new Integer(++globalId);
+	protected synchronized int addText(final Text text) {
+		text.setId(new Integer(dbTable.size() + 1));
+		dbTable.put(text.getId(), text);
+		return text.getId();
+	}
+
+	protected void updateText(final Text text) {
+		final int id = text.getId();
+		dbTable.put(id, text);
 	}
 
 	public Text find(final Integer id) {
@@ -25,28 +30,26 @@ public class TextRepository {
 	}
 
 	public List<Text> findAll() {
-		return dbTable.values().stream()
-				.collect(Collectors.toList());
+		return dbTable.values().stream().collect(Collectors.toList());
 	}
 
 	public void delete(final Integer id) {
-		// TODO Auto-generated method stub
+		dbTable.remove(id);
 	}
 
 	public void deleteAll() {
-		// TODO Auto-generated method stub
+		dbTable.clear();
 	}
 
 	public void save(final List<Text> texte) {
 		for (final Text text : texte) {
-			Integer id = text.getId();
+			final Integer id = text.getId();
 			if (id == null || !dbTable.containsKey(id)) {
 				if (id == null) {
-					id = getNextId();
-					text.setId(id);
+					addText(text);
+				} else {
+					updateText(text);
 				}
-				// both: insert and update text
-				dbTable.put(id, text);
 			}
 		}
 	}
