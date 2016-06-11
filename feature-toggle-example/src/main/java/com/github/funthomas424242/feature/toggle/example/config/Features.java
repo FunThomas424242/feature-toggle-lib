@@ -9,6 +9,11 @@ import static com.github.funthomas424242.libs.toggle.annotations.Feature.State.D
 
 public enum Features implements FeatureToggles {
 
+	/**
+	 * Aktivierung/Deaktivierung der Toggles über SystemProperties bei
+	 * spring-boot: mvn spring-boot:run
+	 * -Drun.jvmArguments="-DFEATURE_HALLO=true"
+	 */
 	@Feature(ENABLED) FEATURE_HELLO, @Feature(DISABLED) FEATURE_HALLO, @Feature(DISABLED) FEATURE_HERO;
 
 	Features() {
