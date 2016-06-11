@@ -1,17 +1,32 @@
 package com.github.funthomas424242.libs.toggle;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.common.collect.HashBiMap;
 
-public class FeatureToggles {
+public interface FeatureToggles {
 
-	protected final Set<Class> featureClasses = new HashSet<>();
+	final HashBiMap<FeatureToggles, String> mapFeatureClassAufFeatureName = HashBiMap
+			.create();
 
-	public FeatureToggles() {
-		// hier alle @Feature suchen und in Set eintragen
-		// da über Annotation Scanner Frameworks schwierig
-		// (Deklaration classpath, jars, classes notwendig)
-		// Dann lieber per SPI die Klassen suchen und die Annotations abfragen
+	final FeatureStateRepository featureStateRepository = new FeatureStateRepository(
+			mapFeatureClassAufFeatureName);
+
+	public default void registerClass(final FeatureToggles featureTogglesClass,
+			final String featureName) {
+		System.out.println("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
+				+ featureName);
+		mapFeatureClassAufFeatureName.forcePut(featureTogglesClass,
+				featureName);
+		try {
+			featureStateRepository.registerFeature(featureName);
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public default boolean isActive() {
+		final String featureName = mapFeatureClassAufFeatureName.get(this);
+		return featureStateRepository.isActive(featureName);
 	}
 
 }

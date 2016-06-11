@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.CONSTRUCTOR)
+@Target(ElementType.FIELD)
 public @interface Feature {
 
 	public enum State {
 		ENABLED, DISABLED
 	}
 
-	public State state() default State.DISABLED;
+	public State value() default State.DISABLED;
 
 }

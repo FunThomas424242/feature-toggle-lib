@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.funthomas424242.feature.toggle.example.command.MessageCommand;
 import com.github.funthomas424242.feature.toggle.example.domain.Text;
 import com.github.funthomas424242.feature.toggle.example.persistence.TextRepository;
 
@@ -18,6 +19,9 @@ public class SampleController {
 
 	@Autowired
 	private TextRepository repository;
+
+	@Autowired
+	private MessageCommand messageCommand;
 
 	@RequestMapping(value = "/characters/{id}", method = RequestMethod.GET)
 	public Text text(@PathVariable("id") final Integer id) {
@@ -33,6 +37,11 @@ public class SampleController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") final Integer id) {
 		repository.delete(id);
+	}
+
+	@RequestMapping(value = "/features/message", method = RequestMethod.GET)
+	public String getMessage() {
+		return messageCommand.getMessage();
 	}
 
 }
