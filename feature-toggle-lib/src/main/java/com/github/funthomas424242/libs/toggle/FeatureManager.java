@@ -1,8 +1,13 @@
 package com.github.funthomas424242.libs.toggle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.HashBiMap;
 
 public class FeatureManager extends AbstractFeatureManager {
+
+	final static Logger LOG = LoggerFactory.getLogger(FeatureManager.class);
 
 	protected final HashBiMap<FeatureToggle, String> mapFeatureClassAufFeatureName = HashBiMap
 			.create();
@@ -13,15 +18,14 @@ public class FeatureManager extends AbstractFeatureManager {
 	@Override
 	protected void registerClass(final FeatureToggle featureTogglesClass,
 			final String featureName) {
-		System.out.println("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
+		LOG.debug("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
 				+ featureName);
 		mapFeatureClassAufFeatureName.forcePut(featureTogglesClass,
 				featureName);
 		try {
 			initialFeatureStateRepository.registerFeature(featureName);
 		} catch (NoSuchFieldException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 

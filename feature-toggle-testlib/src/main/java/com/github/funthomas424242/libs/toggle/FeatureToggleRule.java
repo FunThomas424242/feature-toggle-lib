@@ -3,8 +3,12 @@ package com.github.funthomas424242.libs.toggle;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FeatureToggleRule implements TestRule {
+
+	static final Logger LOG = LoggerFactory.getLogger(FeatureToggleRule.class);
 
 	// pro jvm und Thread eine Instanz (gesichert durch FeatureProvider)
 	protected ModifiableFeatureManager lifeFeatureManager;
@@ -25,13 +29,13 @@ public class FeatureToggleRule implements TestRule {
 	@Override
 	public Statement apply(final Statement base,
 			final Description description) {
-		System.out.println("begin apply" + description.getMethodName());
+		LOG.debug("begin apply" + description.getMethodName());
 		this.base = base;
 		this.description = description;
 		lifeFeatureManager.resetAllToggleStatesToInitialValue();
-		System.out.println("reset all toggle states to initial");
+		LOG.debug("reset all toggle states to initial");
 		final Statement newStatement = new MyStatement(base);
-		System.out.println("end apply" + description.getMethodName());
+		LOG.debug("end apply" + description.getMethodName());
 		return newStatement;
 	}
 
@@ -44,13 +48,12 @@ public class FeatureToggleRule implements TestRule {
 
 		@Override
 		public void evaluate() throws Throwable {
-			System.out.println("begin evaluate" + description.getMethodName());
+			LOG.debug("begin evaluate" + description.getMethodName());
 			try {
 
 				base.evaluate();
 			} finally {
-				System.out
-						.println("end evaluate" + description.getMethodName());
+				LOG.debug("end evaluate" + description.getMethodName());
 			}
 		}
 	}

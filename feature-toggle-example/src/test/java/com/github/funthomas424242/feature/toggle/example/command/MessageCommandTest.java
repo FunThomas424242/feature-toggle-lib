@@ -17,12 +17,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.funthomas424242.feature.toggle.example.config.Features;
 import com.github.funthomas424242.libs.toggle.FeatureToggleRule;
 
 @RunWith(Parameterized.class)
 public class MessageCommandTest {
+
+	static final Logger LOG = LoggerFactory.getLogger(MessageCommandTest.class);
 
 	@Rule
 	public FeatureToggleRule togglRule = new FeatureToggleRule(
@@ -57,17 +61,17 @@ public class MessageCommandTest {
 
 	@BeforeClass
 	public static void initClass() {
-		System.out.println("init class");
+		LOG.debug("init class");
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		System.out.println("teardown class");
+		LOG.debug("teardown class");
 	}
 
 	@Before
 	public void setUp() {
-		System.out.println("Before");
+		LOG.debug("Before");
 		if (featureHelloState) {
 			togglRule.enable(FEATURE_HELLO);
 		} else {
@@ -87,18 +91,18 @@ public class MessageCommandTest {
 
 	@After
 	public void tearDown() {
-		System.out.println("After");
+		LOG.debug("After");
 	}
 
 	@Test
 	public void testGetMessageFeatureUnveraendert() {
-		System.out.println("begin Test");
+		LOG.debug("begin Test");
 		final String result = command.getMessage();
 		assertEquals(featureHelloState, FEATURE_HELLO.isActive());
 		assertEquals(featureHalloState, FEATURE_HALLO.isActive());
 		assertEquals(featureHeroState, FEATURE_HERO.isActive());
 		assertEquals(message, result);
-		System.out.println("ende Test");
+		LOG.debug("ende Test");
 	}
 
 }

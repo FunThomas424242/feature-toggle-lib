@@ -1,8 +1,14 @@
 package com.github.funthomas424242.libs.toggle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.HashBiMap;
 
 public class ModifiableFeatureManager extends AbstractFeatureManager {
+
+	static final Logger LOG = LoggerFactory
+			.getLogger(ModifiableFeatureManager.class);
 
 	protected final AbstractFeatureManager featureManager;
 	protected final HashBiMap<FeatureToggle, String> mapFeatureClassAufFeatureName;
@@ -56,10 +62,10 @@ public class ModifiableFeatureManager extends AbstractFeatureManager {
 		final boolean isEnabled = featureManager.isActive(featureTogglesClass);
 		if (isEnabled) {
 			modifiableFeatureStateRepository.setFeatureActive(featureName);
-			System.out.println(" als enabled.");
+			LOG.debug(" als enabled.");
 		} else {
 			modifiableFeatureStateRepository.setFeatureDeactive(featureName);
-			System.out.println(" als disabled.");
+			LOG.debug(" als disabled.");
 		}
 	}
 
