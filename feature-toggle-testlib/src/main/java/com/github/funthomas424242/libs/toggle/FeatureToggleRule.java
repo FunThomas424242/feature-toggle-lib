@@ -1,16 +1,23 @@
 package com.github.funthomas424242.libs.toggle;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-public class FeatureToggleRule implements TestRule, ToggleStateManager {
+public class FeatureToggleRule implements TestRule {
+
+	static protected ModifiableFeatureManager lifeFeatureManager;
 
 	protected Statement base;
 	protected Description description;
+
+	public FeatureToggleRule() {
+		final AbstractFeatureManager initialFeatureManager = FeatureToggle.featureProvider
+				.getFeatureManager();
+		lifeFeatureManager = new ModifiableFeatureManager(
+				initialFeatureManager);
+		FeatureToggle.featureProvider.setFeatureManager(lifeFeatureManager);
+	}
 
 	@Override
 	public Statement apply(final Statement base,
@@ -18,7 +25,7 @@ public class FeatureToggleRule implements TestRule, ToggleStateManager {
 		System.out.println("begin apply" + description.getMethodName());
 		this.base = base;
 		this.description = description;
-		resetAllToggleStatesToInitialValue();
+		lifeFeatureManager.resetAllToggleStatesToInitialValue();
 		System.out.println("reset all toggle states to initial");
 		final Statement newStatement = new MyStatement(base);
 		System.out.println("end apply" + description.getMethodName());
@@ -46,11 +53,11 @@ public class FeatureToggleRule implements TestRule, ToggleStateManager {
 	}
 
 	public void enable(final FeatureToggle featureToggle) {
-		setActive(featureToggle);
+		lifeFeatureManager.setActive(featureToggle);
 	}
 
 	public void disable(final FeatureToggle featureToggle) {
-		setDeactive(featureToggle);
+		lifeFeatureManager.setDeactive(featureToggle);
 	}
 
 }

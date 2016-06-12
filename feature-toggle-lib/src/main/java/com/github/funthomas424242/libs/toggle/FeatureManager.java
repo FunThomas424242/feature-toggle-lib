@@ -2,7 +2,7 @@ package com.github.funthomas424242.libs.toggle;
 
 import com.google.common.collect.HashBiMap;
 
-public class FeatureManager {
+public class FeatureManager extends AbstractFeatureManager {
 
 	protected final HashBiMap<FeatureToggle, String> mapFeatureClassAufFeatureName = HashBiMap
 			.create();
@@ -10,9 +10,7 @@ public class FeatureManager {
 	protected final FeatureStateRepository initialFeatureStateRepository = new FeatureStateRepository(
 			mapFeatureClassAufFeatureName);
 
-	protected final FeatureStateRepository lifeFeatureStateRepository = new FeatureStateRepository(
-			mapFeatureClassAufFeatureName);
-
+	@Override
 	protected void registerClass(final FeatureToggle featureTogglesClass,
 			final String featureName) {
 		System.out.print("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
@@ -25,37 +23,23 @@ public class FeatureManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		final boolean isEnabled = initialFeatureStateRepository
-				.isActive(featureName);
-		if (isEnabled) {
-			lifeFeatureStateRepository.setFeatureActive(featureName);
-			System.out.println(" als enabled.");
-		} else {
-			lifeFeatureStateRepository.setFeatureDeactive(featureName);
-			System.out.println(" als disabled.");
-		}
 	}
 
-	protected void resetAllToggleStatesToInitialValue() {
-		initialFeatureStateRepository.copyValuesTo(lifeFeatureStateRepository,
-				true);
-	}
-
-	protected void setActive(final FeatureToggle featureToggle) {
-		final String featureName = mapFeatureClassAufFeatureName
-				.get(featureToggle);
-		lifeFeatureStateRepository.setFeatureActive(featureName);
-	}
-
-	protected void setDeactive(final FeatureToggle featureToggle) {
-		final String featureName = mapFeatureClassAufFeatureName
-				.get(featureToggle);
-		lifeFeatureStateRepository.setFeatureDeactive(featureName);
-	}
-
+	@Override
 	public boolean isActive(final FeatureToggle featureToggle) {
 		final String featureName = mapFeatureClassAufFeatureName
 				.get(featureToggle);
-		return lifeFeatureStateRepository.isActive(featureName);
+		return initialFeatureStateRepository.isActive(featureName);
 	}
+
+	@Override
+	protected FeatureStateRepository getFeatureStateRepository() {
+		return initialFeatureStateRepository;
+	}
+
+	@Override
+	protected HashBiMap<FeatureToggle, String> getMapFeatureClassToName() {
+		return mapFeatureClassAufFeatureName;
+	}
+
 }
