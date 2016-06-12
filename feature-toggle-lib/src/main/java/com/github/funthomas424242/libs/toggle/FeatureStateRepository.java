@@ -9,12 +9,12 @@ import com.google.common.collect.BiMap;
 
 public class FeatureStateRepository {
 
-	final protected BiMap<FeatureToggles, String> mapFeatureClassAufFeatureName;
+	final protected BiMap<FeatureToggle, String> mapFeatureClassAufFeatureName;
 
 	final protected HashMap<String, Boolean> featureStates = new HashMap<>();
 
 	public FeatureStateRepository(
-			final BiMap<FeatureToggles, String> toggleMap) {
+			final BiMap<FeatureToggle, String> toggleMap) {
 		this.mapFeatureClassAufFeatureName = toggleMap;
 	}
 
@@ -26,11 +26,38 @@ public class FeatureStateRepository {
 		}
 	}
 
+	protected void setFeatureActive(final String featureName) {
+		featureStates.put(featureName, true);
+	}
+	protected void setFeatureDeactive(final String featureName) {
+		featureStates.put(featureName, false);
+	}
+
+	protected void clearFeatureStates() {
+		featureStates.clear();
+	}
+
+	protected void copyValuesTo(
+			final FeatureStateRepository featureStateRepository,
+			final boolean clearBefore) {
+		if (clearBefore) {
+			featureStateRepository.clearFeatureStates();
+		}
+		for (final String featureName : featureStates.keySet()) {
+			final boolean isEnabled = featureStates.get(featureName);
+			if (isEnabled) {
+				featureStateRepository.setFeatureActive(featureName);
+			} else {
+				featureStateRepository.setFeatureDeactive(featureName);
+			}
+		}
+	}
+
 	public void registerFeature(final String featureName)
 			throws NoSuchFieldException, SecurityException {
-		final Map<String, FeatureToggles> nameToClass = mapFeatureClassAufFeatureName
+		final Map<String, FeatureToggle> nameToClass = mapFeatureClassAufFeatureName
 				.inverse();
-		final FeatureToggles featureToggle = nameToClass.get(featureName);
+		final FeatureToggle featureToggle = nameToClass.get(featureName);
 		final Feature feature = featureToggle.getClass().getField(featureName)
 				.getAnnotation(Feature.class);
 		final State state = feature.value();

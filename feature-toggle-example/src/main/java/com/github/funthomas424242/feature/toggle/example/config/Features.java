@@ -3,11 +3,11 @@ package com.github.funthomas424242.feature.toggle.example.config;
 import com.github.funthomas424242.libs.toggle.annotations.Feature;
 import static com.github.funthomas424242.libs.toggle.annotations.Feature.State.ENABLED;
 
-import com.github.funthomas424242.libs.toggle.FeatureToggles;
+import com.github.funthomas424242.libs.toggle.FeatureToggle;
 
 import static com.github.funthomas424242.libs.toggle.annotations.Feature.State.DISABLED;
 
-public enum Features implements FeatureToggles {
+public enum Features implements FeatureToggle {
 
 	/**
 	 * Aktivierung/Deaktivierung der Toggles über SystemProperties bei
