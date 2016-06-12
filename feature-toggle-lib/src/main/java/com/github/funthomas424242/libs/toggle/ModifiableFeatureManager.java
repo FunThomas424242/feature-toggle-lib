@@ -4,19 +4,23 @@ import com.google.common.collect.HashBiMap;
 
 public class ModifiableFeatureManager extends AbstractFeatureManager {
 
-	final AbstractFeatureManager featureManager;
+	private static final ModifiableFeatureManager INSTANCE = new ModifiableFeatureManager();
 
-	protected final FeatureStateRepository modifiableFeatureStateRepository;
+	protected final AbstractFeatureManager featureManager;
 	protected final HashBiMap<FeatureToggle, String> mapFeatureClassAufFeatureName;
+	protected final FeatureStateRepository modifiableFeatureStateRepository;
 
-	public ModifiableFeatureManager(
-			final AbstractFeatureManager featureManager) {
+	public static ModifiableFeatureManager getInstance() {
+		return INSTANCE;
+	}
 
-		this.featureManager = featureManager;
+	private ModifiableFeatureManager() {
+		this.featureManager = FeatureToggle.featureProvider.getFeatureManager();
 		this.mapFeatureClassAufFeatureName = featureManager
 				.getMapFeatureClassToName();
-		modifiableFeatureStateRepository = new FeatureStateRepository(
+		this.modifiableFeatureStateRepository = new FeatureStateRepository(
 				mapFeatureClassAufFeatureName);
+		FeatureToggle.featureProvider.setFeatureManager(this);
 	}
 
 	@Override

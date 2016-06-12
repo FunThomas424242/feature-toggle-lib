@@ -6,17 +6,14 @@ import org.junit.runners.model.Statement;
 
 public class FeatureToggleRule implements TestRule {
 
-	static protected ModifiableFeatureManager lifeFeatureManager;
+	// pro jvm eine Instanz (Singleton)
+	protected ModifiableFeatureManager lifeFeatureManager;
 
 	protected Statement base;
 	protected Description description;
 
 	public FeatureToggleRule() {
-		final AbstractFeatureManager initialFeatureManager = FeatureToggle.featureProvider
-				.getFeatureManager();
-		lifeFeatureManager = new ModifiableFeatureManager(
-				initialFeatureManager);
-		FeatureToggle.featureProvider.setFeatureManager(lifeFeatureManager);
+		lifeFeatureManager = ModifiableFeatureManager.getInstance();
 	}
 
 	@Override
