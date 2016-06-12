@@ -4,44 +4,17 @@ import com.google.common.collect.HashBiMap;
 
 public class ModifiableFeatureManager extends AbstractFeatureManager {
 
-	private static final ModifiableFeatureManager INSTANCE = new ModifiableFeatureManager();
-
 	protected final AbstractFeatureManager featureManager;
 	protected final HashBiMap<FeatureToggle, String> mapFeatureClassAufFeatureName;
 	protected final FeatureStateRepository modifiableFeatureStateRepository;
 
-	public static ModifiableFeatureManager getInstance() {
-		return INSTANCE;
-	}
-
-	private ModifiableFeatureManager() {
-		this.featureManager = FeatureToggle.featureProvider.getFeatureManager();
+	protected ModifiableFeatureManager(
+			final AbstractFeatureManager initialFeatureManager) {
+		this.featureManager = initialFeatureManager;
 		this.mapFeatureClassAufFeatureName = featureManager
 				.getMapFeatureClassToName();
 		this.modifiableFeatureStateRepository = new FeatureStateRepository(
 				mapFeatureClassAufFeatureName);
-		FeatureToggle.featureProvider.setFeatureManager(this);
-	}
-
-	@Override
-	protected void registerClass(final FeatureToggle featureTogglesClass,
-			final String featureName) {
-		featureManager.registerClass(featureTogglesClass, featureName);
-		final boolean isEnabled = featureManager.isActive(featureTogglesClass);
-		if (isEnabled) {
-			modifiableFeatureStateRepository.setFeatureActive(featureName);
-			System.out.println(" als enabled.");
-		} else {
-			modifiableFeatureStateRepository.setFeatureDeactive(featureName);
-			System.out.println(" als disabled.");
-		}
-	}
-
-	@Override
-	public boolean isActive(final FeatureToggle featureToggle) {
-		final String featureName = mapFeatureClassAufFeatureName
-				.get(featureToggle);
-		return modifiableFeatureStateRepository.isActive(featureName);
 	}
 
 	protected void resetAllToggleStatesToInitialValue() {
@@ -69,6 +42,32 @@ public class ModifiableFeatureManager extends AbstractFeatureManager {
 	@Override
 	protected HashBiMap<FeatureToggle, String> getMapFeatureClassToName() {
 		return mapFeatureClassAufFeatureName;
+	}
+
+	@Override
+	public boolean isModifiable() {
+		return true;
+	}
+
+	@Override
+	protected void registerClass(final FeatureToggle featureTogglesClass,
+			final String featureName) {
+		featureManager.registerClass(featureTogglesClass, featureName);
+		final boolean isEnabled = featureManager.isActive(featureTogglesClass);
+		if (isEnabled) {
+			modifiableFeatureStateRepository.setFeatureActive(featureName);
+			System.out.println(" als enabled.");
+		} else {
+			modifiableFeatureStateRepository.setFeatureDeactive(featureName);
+			System.out.println(" als disabled.");
+		}
+	}
+
+	@Override
+	public boolean isActive(final FeatureToggle featureToggle) {
+		final String featureName = mapFeatureClassAufFeatureName
+				.get(featureToggle);
+		return modifiableFeatureStateRepository.isActive(featureName);
 	}
 
 }

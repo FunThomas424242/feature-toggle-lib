@@ -13,4 +13,6 @@ public abstract class AbstractFeatureManager {
 
 	abstract public boolean isActive(final FeatureToggle featureToggle);
 
+	abstract public boolean isModifiable();
+
 }

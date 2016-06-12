@@ -42,4 +42,9 @@ public class FeatureManager extends AbstractFeatureManager {
 		return mapFeatureClassAufFeatureName;
 	}
 
+	@Override
+	public boolean isModifiable() {
+		return false;
+	}
+
 }

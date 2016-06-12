@@ -6,14 +6,15 @@ import org.junit.runners.model.Statement;
 
 public class FeatureToggleRule implements TestRule {
 
-	// pro jvm eine Instanz (Singleton)
+	// pro jvm und Thread eine Instanz (gesichert durch FeatureProvider)
 	protected ModifiableFeatureManager lifeFeatureManager;
 
 	protected Statement base;
 	protected Description description;
 
 	public FeatureToggleRule() {
-		lifeFeatureManager = ModifiableFeatureManager.getInstance();
+		lifeFeatureManager = FeatureToggle.featureProvider
+				.getModifiableFeatureManager();
 	}
 
 	@Override
