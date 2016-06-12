@@ -53,14 +53,6 @@ public class FeatureProvider {
 		final AbstractFeatureManager featureManager = getFeatureManager();
 		LOG.debug("Provider isActive FeatureManager:" + featureManager);
 		return featureManager.isActive(featureToggle);
-		// if (featureManager == null) {
-		// LOG.debug("Provider isActive NULL in ThreadId:"
-		// + Thread.currentThread().getId());
-		// } else {
-		//
-		// }
-		//
-		// return false;
 	}
 
 }
