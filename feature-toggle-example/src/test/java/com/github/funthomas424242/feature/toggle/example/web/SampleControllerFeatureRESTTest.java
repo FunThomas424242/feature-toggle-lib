@@ -1,18 +1,12 @@
 package com.github.funthomas424242.feature.toggle.example.web;
 
-import static com.jayway.restassured.RestAssured.when;
-
-import java.util.Arrays;
-
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -20,12 +14,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.github.funthomas424242.feature.toggle.example.Application;
-import com.github.funthomas424242.feature.toggle.example.command.MessageCommandTest;
 import com.github.funthomas424242.feature.toggle.example.config.Features;
 import com.github.funthomas424242.feature.toggle.example.domain.Text;
-import com.github.funthomas424242.feature.toggle.example.persistence.TextRepository;
 import com.github.funthomas424242.libs.toggle.FeatureToggleRule;
-import com.jayway.restassured.RestAssured;
+
+import io.restassured.RestAssured;
+import static io.restassured.RestAssured.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
