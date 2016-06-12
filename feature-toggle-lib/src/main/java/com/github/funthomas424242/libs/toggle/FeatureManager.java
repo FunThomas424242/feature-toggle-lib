@@ -13,7 +13,7 @@ public class FeatureManager extends AbstractFeatureManager {
 	@Override
 	protected void registerClass(final FeatureToggle featureTogglesClass,
 			final String featureName) {
-		System.out.print("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
+		System.out.println("REGISTER CLASS:" + this.hashCode() + " WITH NAME: "
 				+ featureName);
 		mapFeatureClassAufFeatureName.forcePut(featureTogglesClass,
 				featureName);
