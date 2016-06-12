@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -17,14 +18,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.github.funthomas424242.libs.toggle.FeatureToggle;
+import com.github.funthomas424242.feature.toggle.example.config.Features;
 import com.github.funthomas424242.libs.toggle.FeatureToggleRule;
 
 @RunWith(Parameterized.class)
 public class MessageCommandTest {
 
 	@Rule
-	public FeatureToggleRule togglRule = new FeatureToggleRule();
+	public FeatureToggleRule togglRule = new FeatureToggleRule(
+			Features.values());
 
 	protected MessageCommand command;
 
@@ -55,9 +57,12 @@ public class MessageCommandTest {
 
 	@BeforeClass
 	public static void initClass() {
-		final FeatureToggle featureHello = FEATURE_HELLO;
-		final FeatureToggle featureHallo = FEATURE_HALLO;
-		final FeatureToggle featureHero = FEATURE_HERO;
+		System.out.println("init class");
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+		System.out.println("teardown class");
 	}
 
 	@Before

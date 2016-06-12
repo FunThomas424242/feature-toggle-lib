@@ -4,6 +4,8 @@ public interface FeatureToggle {
 
 	public static final FeatureProvider featureProvider = new FeatureProvider();
 
+	public String name();
+
 	public default void registerClass(final FeatureToggle featureTogglesClass,
 			final String featureToggleName) {
 		featureProvider.registerClass(featureTogglesClass, featureToggleName);

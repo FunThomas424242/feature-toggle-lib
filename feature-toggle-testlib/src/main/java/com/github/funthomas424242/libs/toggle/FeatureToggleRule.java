@@ -11,8 +11,13 @@ public class FeatureToggleRule implements TestRule {
 
 	protected Statement base;
 	protected Description description;
+	protected Enum<? extends FeatureToggle>[] toggleEnum;
 
-	public FeatureToggleRule() {
+	public FeatureToggleRule(final Enum<? extends FeatureToggle>[] toggleEnum) {
+		// enum wird im Konstruktor verlangt um die Auswertung der SysProps im
+		// register sicherzustellen bevor irgendein Test läuft
+
+		this.toggleEnum = toggleEnum;
 		lifeFeatureManager = FeatureToggle.featureProvider
 				.getModifiableFeatureManager();
 	}
