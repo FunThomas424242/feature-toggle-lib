@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -51,24 +49,12 @@ public class SampleControllerFeatureRESTTest {
 
 	@Before
 	public void setUp() {
-
+		togglRule.initBefore(server);
 		RestAssured.port = port;
 	}
 
 	@Test
 	public void testFeatureHello() {
-		server.addApplicationListener(
-				new ApplicationListener<ApplicationEvent>() {
-
-					@Override
-					public void onApplicationEvent(final ApplicationEvent event) {
-						final long threadId = Thread.currentThread().getId();
-						LOG.debug("Server ThreadId " + threadId);
-
-					}
-
-				});
-
 		LOG.debug("TEST ThreadId:" + Thread.currentThread().getId());
 		togglRule.enable(Features.FEATURE_HELLO);
 		togglRule.disable(Features.FEATURE_HALLO);

@@ -5,6 +5,9 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
 
 public class FeatureToggleRule implements TestRule {
 
@@ -16,6 +19,7 @@ public class FeatureToggleRule implements TestRule {
 	protected Statement base;
 	protected Description description;
 	protected Enum<? extends FeatureToggle>[] toggleEnum;
+	protected long serverThreadId;
 
 	public FeatureToggleRule(final Enum<? extends FeatureToggle>[] toggleEnum) {
 		// enum wird im Konstruktor verlangt um die Auswertung der SysProps im
@@ -24,6 +28,24 @@ public class FeatureToggleRule implements TestRule {
 		this.toggleEnum = toggleEnum;
 		lifeFeatureManager = FeatureToggle.featureProvider
 				.getModifiableFeatureManager();
+
+	}
+
+	public void initBefore(final EmbeddedWebApplicationContext server) {
+		final long threadId = Thread.currentThread().getId();
+		server.addApplicationListener(
+				new ApplicationListener<ApplicationEvent>() {
+
+					@Override
+					public void onApplicationEvent(
+							final ApplicationEvent event) {
+						serverThreadId = Thread.currentThread().getId();
+						LOG.debug("Server ThreadId " + serverThreadId
+								+ " in Thread with id: " + threadId);
+
+					}
+
+				});
 	}
 
 	@Override

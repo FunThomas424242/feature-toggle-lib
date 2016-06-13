@@ -13,14 +13,28 @@ public class FeatureProvider {
 	protected Map<Long, AbstractFeatureManager> mapThreadIdToManager = new HashMap<>();
 
 	protected FeatureProvider() {
-		final Thread thread = Thread.currentThread();
-		final AbstractFeatureManager featureManager = new FeatureManager();
-		mapThreadIdToManager.put(thread.getId(), featureManager);
+		LOG.debug("Provider Constructor ThreadId:"
+				+ Thread.currentThread().getId());
 	}
 
 	protected AbstractFeatureManager getFeatureManager() {
-		final Thread thread = Thread.currentThread();
-		return mapThreadIdToManager.get(thread.getId());
+		final long threadId = Thread.currentThread().getId();
+		LOG.debug("Provider getFeatureManager ThreadId:" + threadId);
+		return mapThreadIdToManager.get(threadId);
+	}
+
+	protected AbstractFeatureManager getFeatureManagerAndIfNullRegisterEnum(
+			final FeatureToggle featureToggle) {
+		final long threadId = Thread.currentThread().getId();
+		LOG.debug("Provider getFeatureManagerAndIfNullRegisterEnum ThreadId:"
+				+ threadId);
+
+		if (!mapThreadIdToManager.containsKey(threadId)) {
+			final AbstractFeatureManager featureManager = new FeatureManager();
+			mapThreadIdToManager.put(threadId, featureManager);
+			registerClass(featureToggle, featureToggle.name());
+		}
+		return mapThreadIdToManager.get(threadId);
 	}
 
 	protected ModifiableFeatureManager getModifiableFeatureManager() {
@@ -38,19 +52,29 @@ public class FeatureProvider {
 		}
 	}
 
-	public void registerClass(final FeatureToggle featureTogglesClass,
+	public void registerClass(final FeatureToggle featureToggle,
 			final String featureToggleName) {
-		LOG.debug(
-				"Provider Register ThreadId:" + Thread.currentThread().getId());
-		final AbstractFeatureManager featureManager = getFeatureManager();
-		featureManager.registerClass(featureTogglesClass, featureToggleName);
+
+		final long threadId = Thread.currentThread().getId();
+		LOG.debug("Provider Register ThreadId:" + threadId);
+
+		if (!mapThreadIdToManager.containsKey(threadId)) {
+			final AbstractFeatureManager featureManager = new FeatureManager();
+			mapThreadIdToManager.put(threadId, featureManager);
+			registerClass(featureToggle, featureToggle.name());
+		} else {
+			final AbstractFeatureManager featureManager = mapThreadIdToManager
+					.get(threadId);
+			featureManager.registerClass(featureToggle, featureToggleName);
+		}
 	}
 
 	public boolean isActive(final FeatureToggle featureToggle) {
 		LOG.debug(
 				"Provider isActive ThreadId:" + Thread.currentThread().getId());
 
-		final AbstractFeatureManager featureManager = getFeatureManager();
+		final AbstractFeatureManager featureManager = getFeatureManagerAndIfNullRegisterEnum(
+				featureToggle);
 		LOG.debug("Provider isActive FeatureManager:" + featureManager);
 		return featureManager.isActive(featureToggle);
 	}

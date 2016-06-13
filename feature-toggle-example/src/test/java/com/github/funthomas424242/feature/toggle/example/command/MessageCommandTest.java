@@ -19,6 +19,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 
 import com.github.funthomas424242.feature.toggle.example.config.Features;
 import com.github.funthomas424242.libs.toggle.FeatureToggleRule;
@@ -27,6 +29,9 @@ import com.github.funthomas424242.libs.toggle.FeatureToggleRule;
 public class MessageCommandTest {
 
 	static final Logger LOG = LoggerFactory.getLogger(MessageCommandTest.class);
+
+	@Autowired
+	EmbeddedWebApplicationContext server;
 
 	@Rule
 	public FeatureToggleRule togglRule = new FeatureToggleRule(
