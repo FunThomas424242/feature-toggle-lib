@@ -58,6 +58,8 @@ public class ModifiableFeatureManager extends AbstractFeatureManager {
 	@Override
 	protected void registerClass(final FeatureToggle featureTogglesClass,
 			final String featureName) {
+		LOG.debug("ModifiableFeatureManager registerClass ThreadId:"
+				+ Thread.currentThread().getId());
 		featureManager.registerClass(featureTogglesClass, featureName);
 		final boolean isEnabled = featureManager.isActive(featureTogglesClass);
 		if (isEnabled) {
