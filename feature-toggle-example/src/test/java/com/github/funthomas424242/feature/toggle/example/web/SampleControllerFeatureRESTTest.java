@@ -3,6 +3,7 @@ package com.github.funthomas424242.feature.toggle.example.web;
 import static io.restassured.RestAssured.when;
 
 import org.apache.http.HttpStatus;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,22 +31,18 @@ import io.restassured.RestAssured;
 @IntegrationTest("server.port:0")
 public class SampleControllerFeatureRESTTest {
 
-	@Autowired
-	EmbeddedWebApplicationContext server;
-
 	static final Logger LOG = LoggerFactory
 			.getLogger(SampleControllerFeatureRESTTest.class);
+
+	@Value("${local.server.port}")
+	int port;
+
+	@Autowired
+	EmbeddedWebApplicationContext server;
 
 	@Rule
 	public FeatureToggleRule togglRule = new FeatureToggleRule(
 			Features.values());
-
-	Text mickey;
-	Text minnie;
-	Text pluto;
-
-	@Value("${local.server.port}")
-	int port;
 
 	@Before
 	public void setUp() {
@@ -60,9 +57,9 @@ public class SampleControllerFeatureRESTTest {
 		togglRule.disable(Features.FEATURE_HALLO);
 		togglRule.disable(Features.FEATURE_HERO);
 
-		when().get("/features/message").then().statusCode(HttpStatus.SC_OK);
+		when().get("/features/message").then().statusCode(HttpStatus.SC_OK)
+				.body(Matchers.containsString("Aktive Features: Hello"));
 		LOG.debug("TEST ThreadId:" + Thread.currentThread().getId());
-		// .body("name", Matchers.is("Mickey Mouse"));
 	}
 
 	// @Test
